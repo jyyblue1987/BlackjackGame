@@ -35,7 +35,15 @@ form {
 
 img {
     width: 100px;
-    margin-left: 4px;
+    margin-left: 4px;    
+}
+
+img:nth-child(even) {
+    -webkit-transform: rotate(1deg);
+    -moz-transform: rotate(1deg);
+    -o-transform: rotate(1deg);
+    -ms-transform: rotate(1deg);
+    transform: rotate(1deg);
 }
 
 .cards {
