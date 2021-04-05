@@ -26,4 +26,36 @@ function startGame() {
     // get card list by spliting
     var card_list = startValues.split(",");
     console.log(card_list);
+
+    displayGame([2, 3], [4, 5]);
+}
+
+function displayGame(com_cards, player_cards) {
+    var html = '<div class="game">' +
+                    '<div class="score"><b>Computer Hand - Total: ?</b></div>';
+
+    html += '<div class="cards">';
+    for(var i = 0; i < com_cards.length; i++)
+    {
+        html += '<img src="/images/2C.png"/>'
+    }
+    html += '</div>';
+                    
+    html += '<div class="score"><b>Player Hand - Total: 8</b></div>' +
+                '</div>'; 
+
+    html += '<div class="cards">';
+    for(var i = 0; i < player_cards.length; i++)
+    {
+        html += '<img src="/images/2C.png"/>'
+    }
+    html += '</div>';
+
+    html += '<div class="action">';
+    html += "<button>Hit</button>";
+    html += "<button>Stand</button>";
+    html += '</div>';    
+
+
+    querySelector = document.querySelector(".start").innerHTML = html;
 }

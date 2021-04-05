@@ -3,8 +3,8 @@ body {
 }
 
 form {
-    background-color: white;
-    width: 400px;
+    background-color: white;    
+    width: fit-content;
     margin: auto;
     padding: 20px;
     border-radius: 5px;
@@ -19,4 +19,33 @@ form {
 .playBtn {
     background: lightgray;
     height: 35px;
+}
+
+.game {
+    padding-top: 200px;
+}
+
+.score {
+    width: fit-content;
+    margin: auto;
+    background-color: white;
+    padding: 10px;
+    border-radius: 1px;    
+}
+
+img {
+    width: 100px;
+    margin-left: 4px;
+}
+
+.cards {
+    width: fit-content;
+    margin: auto;
+    padding: 30px;
+}
+
+.action {
+    width: fit-content;
+    margin: auto;    
+    background-color: lightgray;
 }
