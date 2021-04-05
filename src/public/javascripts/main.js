@@ -37,17 +37,17 @@ function displayGame(com_cards, player_cards) {
     html += '<div class="cards">';
     for(var i = 0; i < com_cards.length; i++)
     {
-        html += '<img src="/images/2C.png"/>'
+        html += '<img src="/images/2C.png" style="margin-left:' + (-50 + 95 * i) + 'px"/>'
     }
     html += '</div>';
                     
-    html += '<div class="score"><b>Player Hand - Total: 8</b></div>' +
-                '</div>'; 
+    html += '<div class="score"><b>Player Hand - Total: 8</b></div>';
+                
 
     html += '<div class="cards">';
     for(var i = 0; i < player_cards.length; i++)
     {
-        html += '<img src="/images/2C.png"/>'
+        html += '<img src="/images/2C.png" style="margin-left:' + (-50 + 95 * i) + 'px"/>'
     }
     html += '</div>';
 
