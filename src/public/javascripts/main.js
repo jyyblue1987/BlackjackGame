@@ -22,6 +22,8 @@ var card_list = [];
 var com_cards_list = [];
 var player_cards_list = [];
 var card_top = 0;
+var computer_stand_flag = 0;
+var player_stand_flag = 0;
 
 function startGame() {
     // hide form
@@ -33,6 +35,8 @@ function startGame() {
     card_list = startValues.split(",");
     console.log(card_list);
     card_top = 0;
+    computer_stand_flag = 0;
+    player_stand_flag = 0;
 
     com_cards_list.push(pickCard());
     player_cards_list.push(pickCard());
@@ -69,7 +73,12 @@ function displayGame(com_cards, player_cards) {
     // computer score
     var computerScore = document.createElement("DIV");
     computerScore.classList.add('score');
-    computerScore.innerHTML = '<b>Computer Hand - Total: ?</b>';
+    var computerSum = calcTotalScore(com_cards);
+
+    if( computer_stand_flag == 1 && player_stand_flag == 1)
+        computerScore.innerHTML = '<b>Computer Hand - Total: ' + computerSum + '</b>';
+    else
+        computerScore.innerHTML = '<b>Computer Hand - Total: ?</b>';
     gameDiv.appendChild(computerScore);
 
     // computer card
@@ -80,7 +89,16 @@ function displayGame(com_cards, player_cards) {
     {
         var num = com_cards[i];
         var card = document.createElement("IMG");
-        card.setAttribute("src", "/images/" + num + "D.png");
+        if( computer_stand_flag == 1 && player_stand_flag == 1)
+            card.setAttribute("src", "/images/" + num + "D.png");
+        else 
+        {
+            if( i == 0 )            
+                card.setAttribute("src", "/images/" + num + "D.png");
+            else
+                card.setAttribute("src", "/images/blue_back.png");
+        }
+
         card.style.marginLeft = (-50 * (com_cards.length - 1) + 95 * i) + 'px';
         computerCard.appendChild(card);
     }
@@ -132,10 +150,34 @@ function displayGame(com_cards, player_cards) {
         player_cards_list.push(num);
 
         displayGame(com_cards_list, player_cards_list);
+        
+        var playerSum = calcTotalScore(player_cards_list);
+        if( playerSum > 21 )
+        {
+            player_stand_flag = computer_stand_flag = 1;
+            displayGame(com_cards_list, player_cards_list);
+            setTimeout(function() {
+                alert("Computer wins");
+            }, 1000);
+        }
+        else
+        {
+            // computer hit 
+            setTimeout(function() {
+                computerPick();
+            }, 1000);
+        }
+        
     });
 
     standButton.addEventListener('click', function(e) {
         console.log("hitButton");
+        player_stand_flag = 1;
+
+        // computer hit 
+        setTimeout(function() {
+            computerPick();
+        }, 1000);
     });
 }
 
@@ -172,4 +214,62 @@ function pickCard() {
     }
 
     return card;
+}
+
+function computerPick() {
+    console.log("computerHit");
+    var num = pickCard();
+
+    var computerSum = calcTotalScore(com_cards_list);
+    if( computerSum < 16 ) // Hit
+    {
+        com_cards_list.push(num);
+        
+        displayGame(com_cards_list, player_cards_list);
+        
+        var computerSum = calcTotalScore(com_cards_list);
+        if( computerSum > 21 )
+        {
+            player_stand_flag = computer_stand_flag = 1;
+            displayGame(com_cards_list, player_cards_list);
+            setTimeout(function() {
+                alert("Player wins");
+            }, 1000);
+
+            return;
+        }
+
+        if( player_stand_flag == 1 )    // player is already stand
+        {
+            setTimeout(computerPick, 1000);
+        }
+    }
+    else    // stand
+    {
+        computer_stand_flag = 1;
+        displayGame(com_cards_list, player_cards_list);
+
+        if( player_stand_flag == 1 )
+        {
+            setTimeout(compareResult, 1000);
+        }
+        else
+        {
+            console.log("Stands");
+        }
+    }
+}
+
+function compareResult() {
+    // compare result            
+    var computerSum = calcTotalScore(com_cards_list);
+    var playerSum = calcTotalScore(player_cards_list);
+    if( playerSum == computerSum )  // tie
+    {
+        alert("Tie: Both Players are bust!!!");
+    }
+    else if( playerSum > computerSum )
+        alert("Player win");
+    else
+        alert("Computer win");
 }
