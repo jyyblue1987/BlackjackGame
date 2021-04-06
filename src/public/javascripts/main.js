@@ -64,6 +64,7 @@ function calcTotalScore(cards) {
 
 function displayGame(com_cards, player_cards) {
     var gameDiv = document.querySelector(".game");
+    gameDiv.innerHTML = '';
 
     // computer score
     var computerScore = document.createElement("DIV");
@@ -80,7 +81,7 @@ function displayGame(com_cards, player_cards) {
         var num = com_cards[i];
         var card = document.createElement("IMG");
         card.setAttribute("src", "/images/" + num + "D.png");
-        card.style.marginLeft = (-50 + 95 * i) + 'px';
+        card.style.marginLeft = (-50 * (com_cards.length - 1) + 95 * i) + 'px';
         computerCard.appendChild(card);
     }
 
@@ -98,13 +99,14 @@ function displayGame(com_cards, player_cards) {
     // player card
     var playerCard = document.createElement("DIV");
     playerCard.classList.add('cards');
+    playerCard.classList.add('player');
 
     for(var i = 0; i < player_cards.length; i++)
     {
         var num = player_cards[i];
         var card = document.createElement("IMG");
         card.setAttribute("src", "/images/" + num + "D.png");
-        card.style.marginLeft = (-50 + 95 * i) + 'px';
+        card.style.marginLeft = (-50 * (player_cards.length - 1) + 95 * i) + 'px';
         playerCard.appendChild(card);
     }
     gameDiv.appendChild(playerCard);
@@ -125,7 +127,11 @@ function displayGame(com_cards, player_cards) {
 
     hitButton.addEventListener('click', function(e) {
         console.log("hitButton");
-        
+        var num = pickCard();
+
+        player_cards_list.push(num);
+
+        displayGame(com_cards_list, player_cards_list);
     });
 
     standButton.addEventListener('click', function(e) {

@@ -58,7 +58,7 @@ img:nth-child(odd) {
 
 .cards {    
     display: flex;
-    justify-content: center;  
+    justify-content: center;      
     padding-top: 20px;
     height: 200px;  
 }
