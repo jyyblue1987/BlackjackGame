@@ -17,6 +17,12 @@ function initEvents() {
     });
 }
 
+
+var card_list = [];
+var com_cards_list = [];
+var player_cards_list = [];
+var card_top = 0;
+
 function startGame() {
     // hide form
     document.querySelector('form').style.display = 'none';
@@ -24,41 +30,39 @@ function startGame() {
     var startValues = document.querySelector('#startValues').value;
 
     // get card list by spliting
-    var card_list = startValues.split(",");
+    card_list = startValues.split(",");
     console.log(card_list);
+    card_top = 0;
 
-    displayGame([2, 3], [4, 5]);
+    com_cards_list.push(pickCard());
+    player_cards_list.push(pickCard());
+    com_cards_list.push(pickCard());
+    player_cards_list.push(pickCard());
+
+    displayGame(com_cards_list, player_cards_list);
+}
+
+function calcTotalScore(cards) {
+    // player score
+    var sum = 0;
+    for(var i = 0; i < cards.length; i++)
+    {
+        var num = cards[i];     
+        if( num == 'A' )
+            num = 1;
+        else if( num == 'J' || num == 'Q' || num == 'K' )
+            num = 10;
+        else 
+            num = parseInt(num);
+
+
+        sum += num;
+    }
+
+    return sum;
 }
 
 function displayGame(com_cards, player_cards) {
-    // var html = '<div class="game">' +
-    //                 '<div class="score"><b>Computer Hand - Total: ?</b></div>';
-
-    // html += '<div class="cards">';
-    // for(var i = 0; i < com_cards.length; i++)
-    // {
-    //     html += '<img src="/images/2C.png" style="margin-left:' + (-50 + 95 * i) + 'px"/>'
-    // }
-    // html += '</div>';
-                    
-    // html += '<div class="score"><b>Player Hand - Total: 8</b></div>';
-                
-
-    // html += '<div class="cards">';
-    // for(var i = 0; i < player_cards.length; i++)
-    // {
-    //     html += '<img src="/images/2C.png" style="margin-left:' + (-50 + 95 * i) + 'px"/>'
-    // }
-    // html += '</div>';
-
-    // html += '<div class="action">';
-    // html += "<button>Hit</button>";
-    // html += "<button>Stand</button>";
-    // html += '</div>';    
-
-
-    // document.querySelector(".start").innerHTML = html;
-
     var gameDiv = document.querySelector(".game");
 
     // computer score
@@ -73,8 +77,9 @@ function displayGame(com_cards, player_cards) {
 
     for(var i = 0; i < com_cards.length; i++)
     {
+        var num = com_cards[i];
         var card = document.createElement("IMG");
-        card.setAttribute("src", "/images/2C.png");
+        card.setAttribute("src", "/images/" + num + "D.png");
         card.style.marginLeft = (-50 + 95 * i) + 'px';
         computerCard.appendChild(card);
     }
@@ -82,10 +87,12 @@ function displayGame(com_cards, player_cards) {
     gameDiv.appendChild(computerCard);
 
 
-    // player score score
+    // player score
+    var playerSum = calcTotalScore(player_cards);
+    
     var playerScore = document.createElement("DIV");
     playerScore.classList.add('score');
-    playerScore.innerHTML = '<b>Player Hand - Total: 8</b>';
+    playerScore.innerHTML = '<b>Player Hand - Total: ' + playerSum + '</b>';
     gameDiv.appendChild(playerScore);
 
     // player card
@@ -94,8 +101,9 @@ function displayGame(com_cards, player_cards) {
 
     for(var i = 0; i < player_cards.length; i++)
     {
+        var num = player_cards[i];
         var card = document.createElement("IMG");
-        card.setAttribute("src", "/images/2C.png");
+        card.setAttribute("src", "/images/" + num + "D.png");
         card.style.marginLeft = (-50 + 95 * i) + 'px';
         playerCard.appendChild(card);
     }
@@ -103,7 +111,7 @@ function displayGame(com_cards, player_cards) {
 
     // Button layer
     var actionDiv = document.createElement("DIV");
-    actionDiv.classList.add('score');
+    actionDiv.classList.add('action');
 
     var hitButton = document.createElement("Button");
     hitButton.innerHTML = "Hit";
@@ -114,8 +122,48 @@ function displayGame(com_cards, player_cards) {
     actionDiv.appendChild(standButton);
 
     gameDiv.appendChild(actionDiv);
-    
 
+    hitButton.addEventListener('click', function(e) {
+        console.log("hitButton");
+        
+    });
 
+    standButton.addEventListener('click', function(e) {
+        console.log("hitButton");
+    });
+}
 
+function pickRandomCard()
+{
+    // pick random
+    var card = Math.floor(Math.random() * 13) + 1;
+    if( card == 1 )
+        card = 'A';
+    else if( card == 11 )
+        card = 'J';
+    else if( card == 12 )
+        card = 'Q';
+    else if( card == 13 )
+        card = 'K';
+
+    return card;
+}
+
+function pickCard() {
+    var card = "";
+    if( card_top >= card_list.length )
+    {
+        // pick random
+        card = pickRandomCard();
+    }
+    else
+    {
+        card = card_list[card_top];
+        if( card == "" )
+            card = pickRandomCard();
+        
+        card_top++;
+    }
+
+    return card;
 }
